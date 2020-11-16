@@ -13,6 +13,7 @@ export class Field extends React.PureComponent {
     render() {
         return <div className="field">
             {this.renderCells()}
+            {this.props.children}
         </div>
     }
 
