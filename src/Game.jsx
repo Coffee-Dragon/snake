@@ -5,23 +5,65 @@ import {Snake} from './Snake.jsx';
 
 export class Game extends React.PureComponent {
   state = {
-    snakeSegments: [[5, 4], [4, 4]],
+    snakeSegments: [[5, 4], [4, 4], [3, 4]],
   };
   /** @enum {'right'|'left'|'up'|'down'} */
-  direction = 'right';
+  direction = 'down';
   intervalID;
+
   nextStep() {
     let snakeSegments = [...this.state.snakeSegments];
-    snakeSegments.unshift([this.state.snakeSegments[0][0]+1, this.state.snakeSegments[0][1]]);
+    const snakeHead = this.state.snakeSegments[0];
+    switch (this.direction) {
+      case 'right':
+        snakeSegments.unshift([snakeHead[0]+1, snakeHead[1]]);
+        break;
+      case 'left':
+        snakeSegments.unshift([snakeHead[0]-1, snakeHead[1]]);
+        break;
+      case 'up':
+        snakeSegments.unshift([snakeHead[0], snakeHead[1]-1]);
+        break;
+      case 'down':
+        snakeSegments.unshift([snakeHead[0], snakeHead[1]+1]);
+        break;
+      default: // no default case in this case:)
+    }
+
     snakeSegments.pop();
     this.setState({snakeSegments: snakeSegments});
   }
   start() {
     this.intervalID = setInterval(this.nextStep.bind(this), 1000);
   }
+  onKeyPress = (event) => {
+    switch (event.key) {
+      case 'ArrowUp':
+        this.direction = 'up';
+        break;
+      case 'ArrowDown':
+        this.direction = 'down';
+        break;
+      case 'ArrowLeft':
+        this.direction = 'left';
+        break;
+      case 'ArrowRight':
+        this.direction = 'right';
+        break;
+      default:
+
+    }
+  }
+
+  componentDidMount() {
+    document.addEventListener('keydown', this.onKeyPress);
+  }
+
   componentWillUnmount() {
     clearInterval(this.intervalID);
+    document.removeEventListener('keydown', this.onKeyPress);
   }
+
   render() {
     return <div>
       <h1>Snake is on</h1>
