@@ -5,14 +5,14 @@ import {Snake} from './Snake.jsx';
 
 export class Game extends React.PureComponent {
   state = {
-    snakeSegments: [[5, 4], [4, 4], [3, 4], [2, 4]],
+    snakeSegments: [[5, 4], [4, 4], [3, 4], [2, 4], [1, 4]],
   };
   /** @enum {'right'|'left'|'up'|'down'} */
-  direction = 'down';
+  direction = 'right';
   intervalID;
 
   nextStep() {
-    let snakeSegments = [...this.state.snakeSegments];
+    const snakeSegments = [...this.state.snakeSegments];
     const snakeHead = this.state.snakeSegments[0];
     switch (this.direction) {
       case 'right':
@@ -31,6 +31,15 @@ export class Game extends React.PureComponent {
     }
 
     snakeSegments.pop();
+    if ((snakeSegments[0][0] > 9 || snakeSegments[0][0] < 0) || (snakeSegments[0][1] > 9 || snakeSegments[0][1] < 0)) {
+      console.log('Game Over!')
+    }
+    for ( let i = 4; i <= snakeSegments.length - 1; i++ ) {
+      if (snakeSegments[0][0] === snakeSegments[i][0] && snakeSegments[0][1] === snakeSegments[i][1]) {
+        console.log('Game Over');
+        break;
+      }
+    }
     this.setState({snakeSegments: snakeSegments});
   }
   start() {
