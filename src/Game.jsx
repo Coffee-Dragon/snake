@@ -5,7 +5,7 @@ import {Snake} from './Snake.jsx';
 
 export class Game extends React.PureComponent {
   state = {
-    snakeSegments: [[5, 4], [4, 4], [3, 4]],
+    snakeSegments: [[5, 4], [4, 4], [3, 4], [2, 4]],
   };
   /** @enum {'right'|'left'|'up'|'down'} */
   direction = 'down';
@@ -37,18 +37,28 @@ export class Game extends React.PureComponent {
     this.intervalID = setInterval(this.nextStep.bind(this), 1000);
   }
   onKeyPress = (event) => {
+    const snakeHead = this.state.snakeSegments[0];
+    const snakeSegPrev = this.state.snakeSegments[1];
     switch (event.key) {
       case 'ArrowUp':
-        this.direction = 'up';
+        if (snakeSegPrev[0] !== snakeHead[0] || snakeSegPrev[1] !== snakeHead[1] - 1) {
+          this.direction = 'up';
+        }
         break;
       case 'ArrowDown':
-        this.direction = 'down';
+        if (snakeSegPrev[0] !== snakeHead[0] || snakeSegPrev[1] !== snakeHead[1] + 1) {
+          this.direction = 'down';
+        }
         break;
       case 'ArrowLeft':
-        this.direction = 'left';
+        if (snakeSegPrev[0] !== snakeHead[0] - 1 || snakeSegPrev[1] !== snakeHead[1]) {
+          this.direction = 'left';
+        }
         break;
       case 'ArrowRight':
-        this.direction = 'right';
+        if (snakeSegPrev[0] !== snakeHead[0] + 1 || snakeSegPrev[1] !== snakeHead[1]) {
+          this.direction = 'right';
+        }
         break;
       default:
 
